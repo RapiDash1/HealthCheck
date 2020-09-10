@@ -1,7 +1,7 @@
 package bst
 
 type TreeNode struct {
-	Val   int
+	Val   float64
 	Left  *TreeNode
 	Right *TreeNode
 }
@@ -12,7 +12,7 @@ func nilNode(node *TreeNode) bool {
 	return node.Val == 0 && node.Left == nil && node.Right == nil
 }
 
-func addTreeNode(val int, node *TreeNode) {
+func addTreeNode(val float64, node *TreeNode) {
 	newNode := TreeNode{Val: val, Left: nil, Right: nil}
 	if node == nil {
 		return
@@ -32,7 +32,7 @@ func addTreeNode(val int, node *TreeNode) {
 	}
 }
 
-func inorderTraversal(node *TreeNode, sortedOrderList *[]int) {
+func inorderTraversal(node *TreeNode, sortedOrderList *[]float64) {
 	if node == nil {
 		return
 	}
@@ -43,13 +43,13 @@ func inorderTraversal(node *TreeNode, sortedOrderList *[]int) {
 	inorderTraversal(node.Right, sortedOrderList)
 }
 
-func SortedOrder() []int {
-	var sortedOrder []int
+func SortedOrder() []float64 {
+	var sortedOrder []float64
 	inorderTraversal(&head, &sortedOrder)
 	return sortedOrder
 }
 
-func AddNode(val int) {
+func AddNode(val float64) {
 	if nilNode(&head) {
 		head = TreeNode{Val: val, Left: nil, Right: nil}
 	} else {
