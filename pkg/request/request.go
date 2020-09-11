@@ -1,0 +1,23 @@
+package request
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
+
+// Response Time
+func ResponseTime(url string) time.Duration {
+	startTime := time.Now()
+	res, err := http.Get(url)
+	if err != nil {
+		fmt.Println(res.StatusCode)
+		panic(err)
+	}
+	if res.StatusCode != 200 {
+		fmt.Println(res.StatusCode)
+	}
+	defer res.Body.Close()
+	diff := time.Now().Sub(startTime)
+	return diff
+}

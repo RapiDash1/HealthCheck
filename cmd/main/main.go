@@ -1,9 +1,9 @@
 package main
 
 import (
-	"healthCheck/pkg/check"
+	"healthCheck/pkg/percentile"
 )
 
 func main() {
-	check.PerformHealthCheck()
+	percentile.PerformHealthCheck()
 }
