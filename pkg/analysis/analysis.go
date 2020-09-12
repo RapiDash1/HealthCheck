@@ -18,10 +18,8 @@ type respTimes struct {
 	values []float64
 }
 
-var responseTimes respTimes
-
-// AnalyzeTodaysLog generates bar graphs for todays logs
-func AnalyzeTodaysLog(loc string) {
+// analyze log files
+func analyze(loc string, readAllLogs bool, responseTimes *respTimes) {
 	folder, err := ioutil.ReadDir(loc)
 	if err != nil {
 		panic(err)
@@ -30,7 +28,7 @@ func AnalyzeTodaysLog(loc string) {
 	for _, file := range folder {
 		extensionlessFileName := strings.Split(file.Name(), ".")[0]
 		fileDate := strings.Split(extensionlessFileName, " ")[0]
-		if nowDate != fileDate {
+		if !readAllLogs && nowDate != fileDate {
 			continue
 		} else {
 			openedFile, err := ioutil.ReadFile(loc + file.Name())
@@ -49,10 +47,25 @@ func AnalyzeTodaysLog(loc string) {
 			}
 		}
 	}
-	chartGraph("../../visualization/", nowDate)
 }
 
-func chartGraph(loc string, fileName string) {
+// AnalyzeAllLogs generates graph for all logs available
+func AnalyzeAllLogs(loc string) {
+	var responseTimes respTimes
+	analyze(loc, true, &responseTimes)
+	chartGraph("../../visualization/", "vizAll", &responseTimes)
+}
+
+// AnalyzeTodaysLog generates bar graphs for todays logs
+func AnalyzeTodaysLog(loc string) {
+	var responseTimes respTimes
+	analyze(loc, false, &responseTimes)
+	nowDate := strings.Split(fmt.Sprint(time.Now()), " ")[0]
+	chartGraph("../../visualization/", nowDate, &responseTimes)
+}
+
+// chartGraph plots a graph at {loc} named as {fileName}.html
+func chartGraph(loc string, fileName string, responseTimes *respTimes) {
 	bar := charts.NewBar()
 	bar.SetGlobalOptions(charts.TitleOpts{Title: "Response time graph"})
 	bar.AddXAxis(responseTimes.keys).

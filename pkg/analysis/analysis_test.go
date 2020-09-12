@@ -5,5 +5,5 @@ import (
 )
 
 func TestAnalyze(t *testing.T) {
-	AnalyzeTodaysLog("../../logs/")
+	AnalyzeAllLogs("../../logs/")
 }
