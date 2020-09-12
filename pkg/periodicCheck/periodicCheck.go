@@ -1,26 +1,25 @@
-package periodicCheck
+package periodiccheck
 
 import (
 	"fmt"
-	"healthCheck/internal/commandLine"
-	"healthCheck/pkg/request"
 	"log"
 	"os"
+	"strings"
 	"time"
+
+	"github.com/RapiDash1/healthCheck/pkg/commandline"
+	"github.com/RapiDash1/healthCheck/pkg/request"
 )
 
 // Perform Check
-func performCheck(url string) time.Duration {
+func performCheck(url string) int64 {
 	return request.ResponseTime(url)
 }
 
 // Log Name
 func logName(logLoc string) string {
-	now := time.Now()
-	hour := now.Hour()
-	min := now.Minute()
-	sec := now.Second()
-	return logLoc + "file_" + fmt.Sprint(hour) + "h" + fmt.Sprint(min) + "m" + fmt.Sprint(sec) + ".log"
+	logName := strings.Split(fmt.Sprint(time.Now()), ".")[0]
+	return logLoc + strings.Replace(logName, ":", "-", -1) + ".log"
 }
 
 // Periodic Check
@@ -42,18 +41,18 @@ func periodicCheck(url string, duration float64, logLoc string) {
 		if float64(time.Now().Sub(startTIme))/(1e9*60) >= duration {
 			return
 		}
-		_, err := log.WriteString(fmt.Sprintf("%s - Response time -> %s\n", fmt.Sprint(time.Now()), performCheck(url)))
+		_, err := log.WriteString(fmt.Sprintf("%s - Response time -> %dms\n", fmt.Sprint(time.Now()), performCheck(url)))
 		if err != nil {
 			panic(err)
 		}
-		time.Sleep(time.Minute)
+		time.Sleep(time.Second)
 	}
 }
 
-// Check
+// Check health periodically
 func Check() {
-	url := commandLine.GetUrlInput()
-	duration := commandLine.GetDurationInput()
-	logLoc := commandLine.GetLogLocInput()
+	url := commandline.GetUrlInput()
+	duration := commandline.GetDurationInput()
+	logLoc := commandline.GetLogLocInput()
 	periodicCheck(url, duration, logLoc)
 }

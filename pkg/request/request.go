@@ -7,7 +7,7 @@ import (
 )
 
 // Response Time
-func ResponseTime(url string) time.Duration {
+func ResponseTime(url string) int64 {
 	startTime := time.Now()
 	res, err := http.Get(url)
 	if err != nil {
@@ -19,5 +19,5 @@ func ResponseTime(url string) time.Duration {
 	}
 	defer res.Body.Close()
 	diff := time.Now().Sub(startTime)
-	return diff
+	return diff.Milliseconds()
 }
