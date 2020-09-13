@@ -13,6 +13,10 @@ import (
 	"github.com/go-echarts/go-echarts/charts"
 )
 
+var (
+	vizFolder string = "../../visualization/"
+)
+
 type respTimes struct {
 	keys   []string
 	values []float64
@@ -51,7 +55,7 @@ func analyze(loc string, readAllLogs bool, responseTimes *respTimes) {
 func AnalyzeAllLogs(loc string) {
 	var responseTimes respTimes
 	analyze(loc, true, &responseTimes)
-	chartGraph("../../visualization/", "vizAll", &responseTimes)
+	chartGraph(vizFolder, "vizAll", &responseTimes)
 }
 
 // AnalyzeTodaysLog generates bar graphs for todays logs
@@ -59,7 +63,7 @@ func AnalyzeTodaysLog(loc string) {
 	var responseTimes respTimes
 	analyze(loc, false, &responseTimes)
 	nowDate := strings.Split(fmt.Sprint(time.Now()), " ")[0]
-	chartGraph("../../visualization/", nowDate, &responseTimes)
+	chartGraph(vizFolder, nowDate, &responseTimes)
 }
 
 // chartGraph plots a graph at {loc} named as {fileName}.html
