@@ -41,6 +41,7 @@ analysis.AnalyzeTodaysLog(<Your log location>)
 ### Images
 <img src = "images/logs.PNG" width = "300">  
 <img src = "images/visualization.PNG" width = "300"> 
+
 ---
 
 # Authors
