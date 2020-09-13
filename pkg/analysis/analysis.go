@@ -5,11 +5,11 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/RapiDash1/healthCheck/pkg/regexhelpers"
 	"github.com/go-echarts/go-echarts/charts"
 )
 
@@ -35,10 +35,8 @@ func analyze(loc string, readAllLogs bool, responseTimes *respTimes) {
 			if err != nil {
 				panic(err)
 			}
-			regTimes, _ := regexp.Compile(" \\d+:\\d+:\\d+")
-			loggedTimes := regTimes.FindAllString(string(openedFile), -1)
-			regRespTimes, _ := regexp.Compile("\\d+.\\d+ms")
-			respTimes := regRespTimes.FindAllString(string(openedFile), -1)
+			loggedTimes := regexhelpers.FindAllStringMatches(string(openedFile), " \\d+:\\d+:\\d+")
+			respTimes := regexhelpers.FindAllStringMatches(string(openedFile), "\\d+.\\d+ms")
 
 			for index := range loggedTimes {
 				responseTimes.keys = append(responseTimes.keys, loggedTimes[index])
